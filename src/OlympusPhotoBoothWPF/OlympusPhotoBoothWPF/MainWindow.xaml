@@ -1,0 +1,65 @@
+﻿<Window x:Class="OlympusPhotoBoothWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OlympusPhotoBoothWPF"
+        xmlns:webApi="clr-namespace:OlympusPhotoBoothWPF.WebApi"
+        xmlns:config="clr-namespace:OlympusPhotoBoothWPF.Configuration"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Fotobox" Height="1024" Width="786" WindowStyle="None">
+  <Grid x:Name="_mainGrid">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="100"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <materialDesign:Card Grid.Row="0" Padding="10" Margin="16" >
+      <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}" FontSize="30" TextAlignment="Center" Text="{Binding Path=Title, Source={x:Static config:PhotoBoothConfigurationProvider.CurrentConfig}}"/>
+    </materialDesign:Card>
+
+    <Viewbox Grid.Row="1" StretchDirection="DownOnly" Stretch="Uniform" Margin="10">
+      <TextBlock TextWrapping="Wrap" x:Name="CountdownLabel" VerticalAlignment="Center" TextAlignment="Center" FontSize="300" Text="1"/>
+    </Viewbox>
+
+    <Image Grid.Row="1" x:Name="FotoboxImage" Stretch="Uniform" Source="{Binding Path=Image, Source={x:Static webApi:CurrentImageCache.Instance}}"/>
+
+    <Grid Grid.Row="2">
+      <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="250"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="200"/>
+        <ColumnDefinition Width="50"/>
+      </Grid.ColumnDefinitions>
+      <Button Grid.Row="0" Grid.Column="0" Style="{DynamicResource MaterialDesignRaisedAccentButton}" Margin="10" Content="Foto" FontSize="20" Click="ButtonPhotoClick"/>
+      <Button Grid.Row="1" Grid.Column="0" Style="{DynamicResource MaterialDesignRaisedAccentButton}" Margin="10" Content="Foto (10s Countdown)" FontSize="20" Click="ButtonPhotoClickIn10Seconds"/>
+
+      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Button Width="100" Style="{DynamicResource MaterialDesignRaisedDarkButton}" Margin="10" Content="Zurück" FontSize="20" Click="ButtonPhotoBackClick"/>
+        <Button Grid.Row="0" Grid.Column="1" Width="100" Style="{DynamicResource MaterialDesignRaisedDarkButton}" Margin="10" Content="Vor" FontSize="20" Click="ButtonPhotoNextClick"/>
+      </StackPanel>
+
+      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+        <CheckBox Style="{DynamicResource MaterialDesignFilterChipCheckBox}" Content="Photo Rec Mode" IsChecked="{Binding Path=(config:ServiceConfiguration.UseRecMode),Mode=TwoWay}"></CheckBox>
+      </StackPanel>
+
+      <Label Grid.Row="0" Grid.Column="2" Content="Olympus:" HorizontalAlignment="Right" FontSize="20" VerticalContentAlignment="Center"/>
+      <Ellipse x:Name="_cameraIpStatus" Grid.Row="0" Grid.Column="3" Fill="Gray" Stretch="Uniform" Margin="5"/>
+      <Label Grid.Row="1" Grid.Column="2" Content="Auslöser:" HorizontalAlignment="Right" FontSize="20" VerticalContentAlignment="Center"/>
+      <Ellipse x:Name="_wifiRemoteStatus" Grid.Row="1" Grid.Column="3" Fill="Gray" Stretch="Uniform" Margin="5"/>
+    </Grid>
+  </Grid>
+</Window>
